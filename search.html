@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DSE 2026 CAP-1 Allotment Search</title>
+<style>
+  :root{
+    --ink:#1b1f23; --sub:#5b6570; --line:#e2e6ea; --bg:#f7f8fa;
+    --accent:#0f6e5f; --accent-dark:#0b5449; --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink);
+  }
+  header{
+    background:var(--accent); color:#fff; padding:28px 20px 22px;
+  }
+  header h1{margin:0 0 4px; font-size:22px; font-weight:700;}
+  header p{margin:0; font-size:13px; opacity:.85;}
+  main{max-width:960px; margin:0 auto; padding:22px 20px 60px;}
+
+  .searchbar{
+    display:flex; gap:10px; margin-bottom:6px;
+  }
+  .searchbar input{
+    flex:1; padding:14px 16px; font-size:16px; border:1px solid var(--line);
+    border-radius:10px; outline:none; background:var(--card);
+  }
+  .searchbar input:focus{border-color:var(--accent);}
+  .hint{font-size:12.5px; color:var(--sub); margin:8px 0 22px;}
+  .status{font-size:13px; color:var(--sub); margin-bottom:14px;}
+
+  .result-card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:16px 18px; margin-bottom:14px;
+  }
+  .result-card .college{
+    font-weight:700; font-size:15.5px; color:var(--accent-dark); margin-bottom:2px;
+  }
+  .result-card .code{color:var(--sub); font-weight:500; font-size:12.5px;}
+  .result-card .branch{font-size:14.5px; margin:6px 0 10px; font-weight:600;}
+  .tags{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
+  .tag{
+    font-size:11.5px; padding:3px 9px; border-radius:99px; background:#eef4f2;
+    color:var(--accent-dark); border:1px solid #d9e8e4; white-space:nowrap;
+  }
+  table.details{width:100%; border-collapse:collapse; font-size:13px;}
+  table.details td{padding:4px 8px 4px 0; color:var(--sub);}
+  table.details td.val{color:var(--ink); font-weight:600;}
+
+  .empty{
+    text-align:center; padding:50px 20px; color:var(--sub); font-size:14px;
+  }
+  .loadfail{
+    background:#fdecec; border:1px solid #f3c7c7; color:#8a2c2c;
+    padding:14px 16px; border-radius:10px; font-size:13.5px; line-height:1.5;
+  }
+  code{background:#eee; padding:1px 5px; border-radius:4px; font-size:12.5px;}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DSE 2026 &middot; CAP Round 1 Allotment Search</h1>
+  <p>Search across all downloaded institute allotment lists by Application ID or candidate name.</p>
+</header>
+
+<main>
+  <div class="searchbar">
+    <input id="q" type="text" placeholder="Enter Application ID (e.g. DSE26142848) or a name..." autofocus>
+  </div>
+  <div class="hint">Tip: Application ID gives an exact match. Name search is partial &amp; case-insensitive — try a surname if a full name gets no hits.</div>
+  <div id="status" class="status"></div>
+  <div id="results"></div>
+</main>
+
+<script>
+let DATA = [];
+let loaded = false;
+
+async function loadData(){
+  try{
+    const res = await fetch('allotment_data.json');
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    DATA = await res.json();
+    loaded = true;
+    document.getElementById('status').textContent =
+      `Loaded ${DATA.length.toLocaleString()} allotment records. Start typing to search.`;
+  }catch(err){
+    document.getElementById('status').innerHTML =
+      `<div class="loadfail">
+        Couldn't load <code>allotment_data.json</code>.<br><br>
+        Make sure this file, <code>search.html</code>, and <code>allotment_data.json</code>
+        are all in the same folder, and that you're opening this page through a local server
+        (not by double-clicking the file). From that folder, run:<br><br>
+        <code>python -m http.server 8000</code><br><br>
+        then open <code>http://localhost:8000/search.html</code> in your browser.
+      </div>`;
+  }
+}
+loadData();
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function renderResults(matches, query){
+  const box = document.getElementById('results');
+  if(!query){
+    box.innerHTML = '';
+    return;
+  }
+  if(matches.length === 0){
+    box.innerHTML = `<div class="empty">No matches found for "${escapeHtml(query)}".</div>`;
+    return;
+  }
+  const capped = matches.slice(0, 200);
+  box.innerHTML = capped.map(r => `
+    <div class="result-card">
+      <div class="college">${escapeHtml(r.college_name)}</div>
+      <div class="code">College Code: ${escapeHtml(r.college_code)} &middot; Branch Code: ${escapeHtml(r.branch_code)}</div>
+      <div class="branch">${escapeHtml(r.branch_name)}</div>
+      <div class="tags">
+        <span class="tag">${escapeHtml(r.seat_type)}</span>
+        <span class="tag">${escapeHtml(r.category)}</span>
+        <span class="tag">${r.gender === 'M' ? 'Male' : 'Female'}</span>
+      </div>
+      <table class="details">
+        <tr><td>Application ID</td><td class="val">${escapeHtml(r.application_id)}</td>
+            <td>Candidate</td><td class="val">${escapeHtml(r.name)}</td></tr>
+        <tr><td>Merit No.</td><td class="val">${escapeHtml(r.merit_no)}</td>
+            <td>Merit Score</td><td class="val">${escapeHtml(r.merit_score)}</td></tr>
+      </table>
+    </div>
+  `).join('');
+  if(matches.length > 200){
+    box.innerHTML += `<div class="empty">Showing first 200 of ${matches.length} matches — refine your search.</div>`;
+  }
+}
+
+function doSearch(){
+  const raw = document.getElementById('q').value.trim();
+  if(!loaded) return;
+  if(!raw){
+    document.getElementById('results').innerHTML = '';
+    return;
+  }
+  const isAppId = /^DSE/i.test(raw) || /^\d{5,}$/.test(raw);
+  let matches;
+  if(isAppId){
+    const needle = raw.toUpperCase().replace(/^DSE/, '');
+    matches = DATA.filter(r => r.application_id.toUpperCase().includes(needle) ||
+                                r.application_id.toUpperCase() === raw.toUpperCase());
+  }else{
+    const needle = raw.toUpperCase();
+    matches = DATA.filter(r => r.name.toUpperCase().includes(needle));
+  }
+  renderResults(matches, raw);
+}
+
+let debounceTimer;
+document.getElementById('q').addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(doSearch, 120);
+});
+</script>
+
+</body>
+</html>

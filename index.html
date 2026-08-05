@@ -13,31 +13,25 @@
     margin:0; font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:var(--bg); color:var(--ink);
   }
-  header{
-    background:var(--accent); color:#fff; padding:28px 20px 22px;
-  }
+  header{background:var(--accent); color:#fff; padding:28px 20px 22px;}
   header h1{margin:0 0 4px; font-size:22px; font-weight:700;}
   header p{margin:0; font-size:13px; opacity:.85;}
   main{max-width:960px; margin:0 auto; padding:22px 20px 60px;}
 
-  .searchbar{
-    display:flex; gap:10px; margin-bottom:6px;
-  }
+  .searchbar{display:flex; gap:10px; margin-bottom:6px;}
   .searchbar input{
     flex:1; padding:14px 16px; font-size:16px; border:1px solid var(--line);
     border-radius:10px; outline:none; background:var(--card);
   }
   .searchbar input:focus{border-color:var(--accent);}
   .hint{font-size:12.5px; color:var(--sub); margin:8px 0 22px;}
-  .status{font-size:13px; color:var(--sub); margin-bottom:14px;}
+  .status{font-size:13px; color:var(--sub); margin-bottom:14px; min-height:18px;}
 
   .result-card{
     background:var(--card); border:1px solid var(--line); border-radius:12px;
     padding:16px 18px; margin-bottom:14px;
   }
-  .result-card .college{
-    font-weight:700; font-size:15.5px; color:var(--accent-dark); margin-bottom:2px;
-  }
+  .result-card .college{font-weight:700; font-size:15.5px; color:var(--accent-dark); margin-bottom:2px;}
   .result-card .code{color:var(--sub); font-weight:500; font-size:12.5px;}
   .result-card .branch{font-size:14.5px; margin:6px 0 10px; font-weight:600;}
   .tags{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
@@ -49,57 +43,68 @@
   table.details td{padding:4px 8px 4px 0; color:var(--sub);}
   table.details td.val{color:var(--ink); font-weight:600;}
 
-  .empty{
-    text-align:center; padding:50px 20px; color:var(--sub); font-size:14px;
-  }
+  .empty{text-align:center; padding:50px 20px; color:var(--sub); font-size:14px;}
   .loadfail{
     background:#fdecec; border:1px solid #f3c7c7; color:#8a2c2c;
     padding:14px 16px; border-radius:10px; font-size:13.5px; line-height:1.5;
   }
   code{background:#eee; padding:1px 5px; border-radius:4px; font-size:12.5px;}
+  .spinner{display:inline-block; width:12px; height:12px; border:2px solid var(--line);
+    border-top-color:var(--accent); border-radius:50%; animation:spin .7s linear infinite; margin-right:6px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .follow-link{
+    position:fixed; z-index:50; display:flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--line); border-radius:99px;
+    padding:7px 14px; font-size:12px; font-weight:600; color:var(--accent-dark);
+    text-decoration:none; box-shadow:0 2px 8px rgba(0,0,0,.08);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .follow-link:hover{transform:translateY(-1px); box-shadow:0 4px 12px rgba(0,0,0,.12);}
+  .follow-link svg{width:14px; height:14px; flex-shrink:0;}
+  .follow-top-left{top:14px; left:14px;}
+  .follow-top-right{top:14px; right:14px;}
+  .follow-bottom-left{bottom:14px; left:14px;}
+  .follow-bottom-right{bottom:14px; right:14px;}
+  @media (max-width:600px){
+    .follow-link{padding:6px 10px; font-size:10.5px;}
+  }
 </style>
 </head>
 <body>
 
+<a class="follow-link follow-top-left" href="https://www.linkedin.com/in/prathmesh-surywanshi/" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="#0a66c2"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+  FOLLOW ME HERE
+</a>
+<a class="follow-link follow-top-right" href="https://github.com/Prathmesh-Surywanshi" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="#1b1f23"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+  FOLLOW ME HERE
+</a>
+
+
 <header>
   <h1>DSE 2026 &middot; CAP Round 1 Allotment Search</h1>
-  <p>Search across all downloaded institute allotment lists by Application ID or candidate name.</p>
+  <p>Search by Application ID or candidate name. Results are looked up on the server — no full data list is ever sent to your browser.</p>
 </header>
 
 <main>
   <div class="searchbar">
     <input id="q" type="text" placeholder="Enter Application ID (e.g. DSE26142848) or a name..." autofocus>
   </div>
-  <div class="hint">Tip: Application ID gives an exact match. Name search is partial &amp; case-insensitive — try a surname if a full name gets no hits.</div>
+  <div class="hint">Tip: Application ID gives an exact-ish match. Name search is partial &amp; case-insensitive — try a surname if a full name gets no hits.</div>
   <div id="status" class="status"></div>
   <div id="results"></div>
 </main>
 
 <script>
-let DATA = [];
-let loaded = false;
+let debounceTimer;
+let currentController;
 
-async function loadData(){
-  try{
-    const res = await fetch('allotment_data.json');
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    DATA = await res.json();
-    loaded = true;
-    document.getElementById('status').textContent =
-      `Loaded ${DATA.length.toLocaleString()} allotment records. Start typing to search.`;
-  }catch(err){
-    document.getElementById('status').innerHTML =
-      `<div class="loadfail">
-        Couldn't load <code>allotment_data.json</code>.<br><br>
-        Make sure this file, <code>search.html</code>, and <code>allotment_data.json</code>
-        are all in the same folder, and that you're opening this page through a local server
-        (not by double-clicking the file). From that folder, run:<br><br>
-        <code>python -m http.server 8000</code><br><br>
-        then open <code>http://localhost:8000/search.html</code> in your browser.
-      </div>`;
-  }
-}
-loadData();
+document.getElementById('q').addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(doSearch, 200);
+});
 
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c => ({
@@ -107,18 +112,59 @@ function escapeHtml(s){
   }[c]));
 }
 
-function renderResults(matches, query){
+function setStatus(html){
+  document.getElementById('status').innerHTML = html;
+}
+
+async function doSearch(){
+  const raw = document.getElementById('q').value.trim();
   const box = document.getElementById('results');
-  if(!query){
+
+  if (!raw){
     box.innerHTML = '';
+    setStatus('');
     return;
   }
-  if(matches.length === 0){
+
+  if (currentController) currentController.abort();
+  currentController = new AbortController();
+
+  setStatus('<span class="spinner"></span> Searching...');
+
+  try{
+    const res = await fetch('/api/search?q=' + encodeURIComponent(raw), {
+      signal: currentController.signal
+    });
+    if (!res.ok){
+      const errBody = await res.text();
+      setStatus(`<div class="loadfail">
+        Search request failed (HTTP ${res.status}).<br><br>
+        If you're testing locally, make sure you're running this through
+        <code>wrangler pages dev</code> (not just opening the HTML file directly) —
+        the <code>/api/search</code> endpoint only works when the Pages Function
+        and D1 binding are active.<br><br>
+        <code>${escapeHtml(errBody).slice(0,300)}</code>
+      </div>`);
+      box.innerHTML = '';
+      return;
+    }
+    const data = await res.json();
+    setStatus(`${data.total}${data.capped ? '+' : ''} match(es) for "${escapeHtml(raw)}"`);
+    renderResults(data.results, raw);
+  }catch(err){
+    if (err.name === 'AbortError') return; // superseded by a newer keystroke
+    setStatus(`<div class="loadfail">Couldn't reach the search API: ${escapeHtml(err.message)}</div>`);
+    box.innerHTML = '';
+  }
+}
+
+function renderResults(matches, query){
+  const box = document.getElementById('results');
+  if (!matches || matches.length === 0){
     box.innerHTML = `<div class="empty">No matches found for "${escapeHtml(query)}".</div>`;
     return;
   }
-  const capped = matches.slice(0, 200);
-  box.innerHTML = capped.map(r => `
+  box.innerHTML = matches.map(r => `
     <div class="result-card">
       <div class="college">${escapeHtml(r.college_name)}</div>
       <div class="code">College Code: ${escapeHtml(r.college_code)} &middot; Branch Code: ${escapeHtml(r.branch_code)}</div>
@@ -136,37 +182,17 @@ function renderResults(matches, query){
       </table>
     </div>
   `).join('');
-  if(matches.length > 200){
-    box.innerHTML += `<div class="empty">Showing first 200 of ${matches.length} matches — refine your search.</div>`;
-  }
 }
-
-function doSearch(){
-  const raw = document.getElementById('q').value.trim();
-  if(!loaded) return;
-  if(!raw){
-    document.getElementById('results').innerHTML = '';
-    return;
-  }
-  const isAppId = /^DSE/i.test(raw) || /^\d{5,}$/.test(raw);
-  let matches;
-  if(isAppId){
-    const needle = raw.toUpperCase().replace(/^DSE/, '');
-    matches = DATA.filter(r => r.application_id.toUpperCase().includes(needle) ||
-                                r.application_id.toUpperCase() === raw.toUpperCase());
-  }else{
-    const needle = raw.toUpperCase();
-    matches = DATA.filter(r => r.name.toUpperCase().includes(needle));
-  }
-  renderResults(matches, raw);
-}
-
-let debounceTimer;
-document.getElementById('q').addEventListener('input', () => {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(doSearch, 120);
-});
 </script>
+
+<a class="follow-link follow-bottom-left" href="https://www.linkedin.com/in/prathmesh-surywanshi/" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="#0a66c2"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+  FOLLOW ME HERE
+</a>
+<a class="follow-link follow-bottom-right" href="https://github.com/Prathmesh-Surywanshi" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="#1b1f23"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.75 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.24 2.76.12 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .3.2.66.79.55A10.52 10.52 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+  FOLLOW ME HERE
+</a>
 
 </body>
 </html>
